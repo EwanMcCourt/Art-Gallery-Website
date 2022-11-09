@@ -10,7 +10,7 @@
 $name = strip_tags(isset($_POST["name"]) && ($_POST["name"]!=="") ? $_POST["name"] : "");
 $phone_number = strip_tags(isset($_POST["phone_number"]) && ($_POST["phone_number"]!=="") ? $_POST["phone_number"] : "");
 $email= strip_tags(isset($_POST["email"]) && ($_POST["email"]!=="") ? $_POST["email"] : "");
-$postal_address=isset($_POST["postal_address"]);
+$postal_address=strip_tags(isset($_POST["postal_address"]) && ($_POST["postal_address"]!=="") ? $_POST["postal_address"] : "");
 $host = "devweb2022.cis.strath.ac.uk";//set year for devweb
 $user = "vib20137";//your username
 $pass = "ush2Cei9uor0";//your MySQL password (or include from a .gitignored file
@@ -29,7 +29,7 @@ if (!$result){
 }
 
 
-if ($name && $phone_number && $email && $postal_address){//Both required variables are set - show response
+if ($name && $phone_number && $email && $postal_address){
 
     echo "Thank you! Your order has been placed.";
 
