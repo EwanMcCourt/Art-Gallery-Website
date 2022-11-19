@@ -42,7 +42,8 @@ $height = strip_tags(isset($_POST["height"]) && ($_POST["height"]!=="") ? $_POST
 $price = strip_tags(isset($_POST["price"]) && ($_POST["price"]!=="") ? $_POST["price"] : "");
 $description = strip_tags(isset($_POST["description"]) && ($_POST["description"]!=="") ? $_POST["description"] : "");
 
-$password = strip_tags(isset($_POST["password"]) && ($_POST["password"]!=="") ? $_POST["password"]: "");
+
+
 
 /*
  * Simple function to make get a POST variable safely (tags stripped and MySQL escapes added
@@ -65,27 +66,59 @@ if ($conn->connect_error){
 
 
 
+if(!isset($userFile)) {
+    echo '<p>Please select a file</p>';
+}
+
+if($name && $date_of_completion && $width && $height && $price && $description && is_uploaded_file($_FILES["userfile"]['tmp_name']) && getimagesize($_FILES["userfile"]['tmp_name']) != false){
+ /***  get the image info. ***/
+    $info = getimagesize($_FILES['userfile']['tmp_name']);
+    $type = $info['mime'];
+    $imgfp = file_get_contents($_FILES['userfile']['tmp_name']);
+    $dims = $info[3];
+    $imgName = basename($_FILES['userfile']['name']);
+    $imgType = pathinfo($imgName, PATHINFO_EXTENSION);
+    $maxsize = 999999;
+    $allowTypes = array('jpg','png','jpeg','gif');      //https://www.codexworld.com/store-retrieve-image-from-database-mysql-php/
 
 
-if($name && $date_of_completion && $width && $height && $price && $description ){
+    echo "<p>Image of name '$imgName', type $type, dimensions $dims and size " . $_FILES['userfile']['size'] . "B uploaded successfully</p>"; //FIXME Debug info
+    if(in_array($imgType, $allowTypes)){
+        $image = $_FILES['userfile']['tmp_name'];
+        $imgContent = addslashes(file_get_contents($image));
+        if ($_FILES['userfile']['size'] < $maxsize) {
+                $insert = $conn->prepare("INSERT INTO `ASSIGNMENT_2` (`name`, `date_of_completion`, `width(mm)`, `height(mm)`, `price(£)`,`description`,`id`, `image`)".
+                        " VALUES ('$name', '$date_of_completion','$width', '$height','$price', '$description',NULL, (?))");
 
-    $insert = "INSERT INTO `ASSIGNMENT_2` (`name`, `date_of_completion`, `width(mm)`, `height(mm)`, `price(£)`,`description`,`id`)".
-        " VALUES ('$name', '$date_of_completion','$width', '$height','$price', '$description',NULL)";
+                if (!$insert->bind_param('b', $imgfp)) {
+                            die("Failed to bind parameter");
+                }//FIXME only show error during debugging
+                if (!$insert->send_long_data(0, $imgfp)) {
+                            die("Failed to send long data");
+                }//FIXME only show error during debugging
+                if (!$insert->execute()) {
+                            die("Failed to execute query " . $insert->error);
+                }//FIXME only show error during debugging
 
-    if ($conn->query($insert)){
-        echo "Painting added succesfully!";
+                        printf("%d Row inserted with ID %d.\n", $insert->affected_rows, $conn->insert_id);
 
-        $insert = "SELECT * FROM `ASSIGNMENT_2`  WHERE `id` = ".$conn->insert_id;
-        $result = $conn->query($insert);
 
-        if (!$result){
-            die("Query failed ".$conn->error); //FIXME remove details once working.
+                    echo "Painting added succesfully!";
+
+                    $select = "SELECT * FROM `ASSIGNMENT_2`  WHERE `id` = ".$conn->insert_id;
+                    $result = $conn->query($select);
+
+                    if (!$result){
+                        die("Query failed ".$conn->error); //FIXME remove details once working.
+                    }
+
+
+
+        }else{
+            die ("Must be appropriate size of image".$conn->error);
         }
-
-
-
-    } else {
-        die ("query failed ".$conn->error);//FIXME remove details once working.
+    }else{
+        die ("Must be of type jpg, png, jpeg or gif".$conn->error);
     }
 }else {//invalid submission - show the form
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST["add"])) {
@@ -94,18 +127,29 @@ if($name && $date_of_completion && $width && $height && $price && $description )
 }
 
 
+
+
+
+
+
+
+
 ?>
-<form action ="adminAddPainting.php" method ="post" id = "myForm">
-<input type="button" onclick="location.href='https://devweb2022.cis.strath.ac.uk/~vib20137/test/lasdsfdasfasddfsdf/admin.php'" value="Back to admin screen" /><table>
+<form action ="adminAddPainting.php" method ="post" id = "myForm" enctype = "multipart/form-data">
+<input type="button" onclick="location.href='https://devweb2022.cis.strath.ac.uk/~vib20137/test/lasdsfdasfasddfsdf/admin.php'" value="Back to admin screen" />
 
 
         <h2>Add painting to database: </h2>
+
         <p>Name: <input type="text" name="name" value="<?php echo $name; ?>" placeholder="name"></p>
         <p>Date of completion:   <input type="date" name="date_of_completion" value="<?php echo $date_of_completion; ?>" placeholder="date of completion"></p>
         <p>Width(mm):   <input type="text" name="width" value="<?php echo $width; ?>" placeholder="width"></p>
         <p>Height(mm):   <input type="text" name="height" value="<?php echo $height; ?>" placeholder="height"></p>
         <p>Price(£):   <input type="text" name="price" value="<?php echo $price; ?>" placeholder="price"></p>
         <p>Description:   <input type="text" name="description" value="<?php echo $description; ?>" placeholder="description"></p>
+    <input type="hidden" name="MAX_FILE_SIZE" value="99999999" />
+    <p>Image :<div><input name="userfile" type="file" /></div></p>
+
 
         <p><input type="submit" name="add" value="add"></p>
 
@@ -114,6 +158,11 @@ if($name && $date_of_completion && $width && $height && $price && $description )
 
 
 </form>
+
+<!--<form enctype="multipart/form-data" action="adminAddPainting.php" method="post">-->
+<!---->
+<!--    <div><input type="submit" value="Submit" /></div>-->
+<!--</form>-->
 
 <?php
 
