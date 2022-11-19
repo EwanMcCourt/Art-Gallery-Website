@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
     <meta charset="UTF-8">
     <title>ASSIGNMENT 2</title>
 </head>
@@ -17,6 +19,13 @@ $pass = "ush2Cei9uor0";//your MySQL password (or include from a .gitignored file
 $dbname = $user;
 $conn = new mysqli($host, $user, $pass, $dbname);
 $id = intval($_GET["id"]);
+$validEmail = False;
+
+if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
+
+    $validEmail =True;
+}
+
 if ($conn->connect_error){
     die("Connection failed : ".$conn->connect_error); //FIXME remove details once working.
 }
@@ -29,7 +38,7 @@ if (!$result){
 }
 
 
-if ($name && $phone_number && $email && $postal_address){
+if ($name && $phone_number && $email && $postal_address && $validEmail){
 
     echo "Thank you! Your order has been placed.";
 
@@ -55,12 +64,25 @@ if ($name && $phone_number && $email && $postal_address){
 } else {//invalid submission - show the form
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {  //https://stackoverflow.com/questions/1372147/check-whether-a-request-is-get-or-post
         echo "<p>Form completion errors - please check all fields.</p>";
+        if(!$email || !$validEmail){
+            echo "<p>Please complete the 'Email' field with a valid email.</p>";
+        }
+        if(!$name){
+            echo "<p> Please complete the 'Name' field with a valid name.</p>";
+        }
+        if(!$postal_address){
+            echo "<p> Please complete the 'Postal address' field with a valid address.</p>";
+        }
+        if(!$phone_number){
+            echo "<p> Please complete the 'Phone number' field with a valid phone number.</p>";
+        }
     }
+
     ?>
     <form action="form.php?id=<?=$id?>" method="post">
         <p>You are purchasing: </p>
-        <table><tr>
-
+        <table class = "table "><tr>
+                <thead class="thead-dark">
             <th>name</th>
             <th>date of completion</th>
             <th>width(mm)</th>
@@ -68,12 +90,43 @@ if ($name && $phone_number && $email && $postal_address){
             <th>price(£)</th>
             <th>description </th>
                 <th>id</th>
-        </tr></table>
+            </tr></thead>
         <?php
+        $details = array();
 
-        foreach ($row as $value) {
-        echo "$value";
-        }?>
+        if ($result->num_rows>0){
+
+            foreach ($row as $value) {
+                array_push($details, $value);
+
+            }
+            $image = end($details);
+            echo '<img src="data:image/jpeg;base64,'.base64_encode( $image ).'"width="750" height="750"/>';
+            $sliced = array_slice($details, 0, -1); //https://stackoverflow.com/questions/7096084/getting-all-the-values-in-an-array-except-the-last-one
+            $paintingName= $sliced[0];
+            $paintingDate= $sliced[1];
+            $paintingWidth= $sliced[2];
+            $paintingHeight= $sliced[3];
+            $paintingPrice= $sliced[4];
+            $paintingDescription= $sliced[5];
+            $paintingId= $sliced[6];
+
+
+         echo "<tr>".
+            "<td>".$paintingName."</td>".
+            "<td>".$paintingDate."</td>".
+            "<td>".$paintingWidth."</td>".
+            "<td>".$paintingHeight."</td>".
+            "<td>".$paintingPrice."</td>".
+            "<td>".$paintingDescription."</td>".
+            "<td>".$paintingId."</td>".
+            "</tr>";
+
+            }?>
+
+
+
+       </table>
         <p>Please fill in your details in the form below.</p>
         <p>Name: <input type="text" name="name" value="<?php echo $name; ?>" placeholder="name"></p>
          <p>Phone Number:   <input type="text" name="phone_number" value="<?php echo $phone_number; ?>" placeholder="phone number"></p>
@@ -83,8 +136,8 @@ if ($name && $phone_number && $email && $postal_address){
         <p><input type="submit"></p>
     </form>
     <?php
-}
 
+}
 ?>
 </body>
 </html>

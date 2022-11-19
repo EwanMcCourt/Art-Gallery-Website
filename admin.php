@@ -37,7 +37,7 @@ The suggested attribution is:
 
 
 $password = strip_tags(isset($_POST["password"]) && ($_POST["password"]!=="") ? $_POST["password"]: "");
-
+//The admin section should be password protected. If you are splitting this across multiple pages then best practice is use of session variable once logged in to one page - a little technical extension mark if you do this...
 /*
  * Simple function to make get a POST variable safely (tags stripped and MySQL escapes added
  */
@@ -47,7 +47,7 @@ $password = strip_tags(isset($_POST["password"]) && ($_POST["password"]!=="") ? 
 ?>
 <form action ="admin.php" method ="post" id = "myForm">
     <p>For security, please input the password to access administrator screen. </p>
-    Password: <input type="text" name="password" value="<?php echo $password; ?>" ><p><input type="submit" name="login" value="login"></p>
+    Password: <input type="password" name="password" value="<?php echo $password; ?>" ><p><input type="submit" name="login" value="login"></p>
     <?php
     if (isset($_POST["login"]) || isset($_POST["add"])) {
         if ($password === "YouAskMeHow22"){
@@ -56,6 +56,7 @@ $password = strip_tags(isset($_POST["password"]) && ($_POST["password"]!=="") ? 
 
     <input type="button" onclick="location.href='https://devweb2022.cis.strath.ac.uk/~vib20137/test/lasdsfdasfasddfsdf/adminViewOrders.php'" value="View Orders" />
     <input type="button" onclick="location.href='https://devweb2022.cis.strath.ac.uk/~vib20137/test/lasdsfdasfasddfsdf/adminAddPainting.php'" value="Add Painting" />
+    <input type="button" onclick="location.href='https://devweb2022.cis.strath.ac.uk/~vib20137/test/lasdsfdasfasddfsdf/adminRemoveOrders.php'" value="Remove Order" />
 
 
 
