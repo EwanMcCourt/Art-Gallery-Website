@@ -28,6 +28,39 @@ The suggested attribution is:
 ?>
 <html lang="en">
 <head>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+    <style>
+        body{
+            background-color: #343a40;
+        }
+        p{
+            color:white;
+        }
+
+        #fileButton{
+            color:white;
+        }
+
+        #backButton{
+            margin:10px;
+        }
+
+        h1{
+            color:white;
+            text-align: left;
+            margin-left:30px;
+            font-weight: bold;
+            text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+
+
+        }
+        #theForm{
+            margin:30px;
+
+        }
+    </style>
     <meta charset="UTF-8">
     <title>ASSIGNMENT 2</title>
 </head>
@@ -66,9 +99,6 @@ if ($conn->connect_error){
 
 
 
-if(!isset($userFile)) {
-    echo '<p>Please select a file</p>';
-}
 
 if($name && $date_of_completion && $width && $height && $price && $description && is_uploaded_file($_FILES["userfile"]['tmp_name']) && getimagesize($_FILES["userfile"]['tmp_name']) != false){
  /***  get the image info. ***/
@@ -82,7 +112,6 @@ if($name && $date_of_completion && $width && $height && $price && $description &
     $allowTypes = array('jpg','png','jpeg','gif');      //https://www.codexworld.com/store-retrieve-image-from-database-mysql-php/
 
 
-    echo "<p>Image of name '$imgName', type $type, dimensions $dims and size " . $_FILES['userfile']['size'] . "B uploaded successfully</p>"; //FIXME Debug info
     if(in_array($imgType, $allowTypes)){
         $image = $_FILES['userfile']['tmp_name'];
         $imgContent = addslashes(file_get_contents($image));
@@ -100,10 +129,10 @@ if($name && $date_of_completion && $width && $height && $price && $description &
                             die("Failed to execute query " . $insert->error);
                 }//FIXME only show error during debugging
 
-                        printf("%d Row inserted with ID %d.\n", $insert->affected_rows, $conn->insert_id);
+                        printf("<p>%d Painting added successfully with ID %d.\n</p>", $insert->affected_rows, $conn->insert_id);
 
 
-                    echo "Painting added succesfully!";
+
 
                     $select = "SELECT * FROM `ASSIGNMENT_2`  WHERE `id` = ".$conn->insert_id;
                     $result = $conn->query($select);
@@ -121,9 +150,9 @@ if($name && $date_of_completion && $width && $height && $price && $description &
         die ("Must be of type jpg, png, jpeg or gif".$conn->error);
     }
 }else {//invalid submission - show the form
-    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST["add"])) {
-        echo "failed to add painting to database";
-    }
+//    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST["add"])) {
+//        echo "<p>Failed to add painting to database</p>";
+//    }
 }
 
 
@@ -135,26 +164,27 @@ if($name && $date_of_completion && $width && $height && $price && $description &
 
 
 ?>
-<form action ="adminAddPainting.php" method ="post" id = "myForm" enctype = "multipart/form-data">
-<input type="button" onclick="location.href='https://devweb2022.cis.strath.ac.uk/~vib20137/test/lasdsfdasfasddfsdf/admin.php'" value="Back to admin screen" />
+<form action ="adminAddPainting.php" method ="post" class ="was-validated" id = "myForm" enctype = "multipart/form-data" >
+    <div id ="backButton">
+<input type="button" onclick="location.href='https://devweb2022.cis.strath.ac.uk/~vib20137/test/lasdsfdasfasddfsdf/admin.php'" value="Back to admin screen" class="btn btn-secondary "/>
+    </div>
 
-
-        <h2>Add painting to database: </h2>
-
-        <p>Name: <input type="text" name="name" value="<?php echo $name; ?>" placeholder="name"></p>
-        <p>Date of completion:   <input type="date" name="date_of_completion" value="<?php echo $date_of_completion; ?>" placeholder="date of completion"></p>
-        <p>Width(mm):   <input type="text" name="width" value="<?php echo $width; ?>" placeholder="width"></p>
-        <p>Height(mm):   <input type="text" name="height" value="<?php echo $height; ?>" placeholder="height"></p>
-        <p>Price(£):   <input type="text" name="price" value="<?php echo $price; ?>" placeholder="price"></p>
-        <p>Description:   <input type="text" name="description" value="<?php echo $description; ?>" placeholder="description"></p>
+        <h1>Add painting to database: </h1>
+<div id = "theForm">
+    <p>Name: <input class="form-control is-valid" type="text" name="name" value="<?php echo $name; ?>" placeholder="name" style="width:75%;"required></p>
+        <p>Date of completion:   <input type="date" class="form-control is-valid" name="date_of_completion" value="<?php echo $date_of_completion; ?>" placeholder="date of completion" style="width:25%;" required></p>
+        <p>Width(mm):   <input type="number"  class="form-control is-valid" name="width" value="<?php echo $width; ?>" placeholder="width" style="width:25%;"required></p>
+        <p>Height(mm):   <input type="number" class="form-control is-valid" name="height" value="<?php echo $height; ?>" placeholder="height" style="width:25%;"required></p>
+        <p>Price(£):   <input type="number" class="form-control is-valid" name="price" value="<?php echo $price; ?>" placeholder="price"style="width:25%;" required></p>
+        <p>Description:   <input type="text" class="form-control is-valid" name="description" value="<?php echo $description; ?>" placeholder="description" style="width:75%;" required></p>
     <input type="hidden" name="MAX_FILE_SIZE" value="99999999" />
-    <p>Image :<div><input name="userfile" type="file" /></div></p>
+    <p>Image :<div id = "fileButton"><input name="userfile" type="file" required /></div></p>
 
 
-        <p><input type="submit" name="add" value="add"></p>
+        <p><input type="submit" name="add" value="Add painting" class="btn btn-primary"></p>
 
 
-
+</div>
 
 
 </form>
