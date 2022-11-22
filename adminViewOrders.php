@@ -29,6 +29,28 @@ The suggested attribution is:
     <html lang="en">
     <head>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+
+        <style>
+            body{
+                background-color:#343a40;
+            }
+
+            #backButton{
+                margin:10px;
+
+            }
+            h1{
+                color:white;
+
+                text-align: left;
+                margin-left:30px;
+                font-weight: bold;
+                text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+
+
+            }
+        </style>
         <meta charset="UTF-8">
         <title>ASSIGNMENT 2</title>
     </head>
@@ -60,7 +82,9 @@ if (!$result){
 $result->data_seek(0);
 ?>
 <form action ="admin.php" method ="post" id = "myForm">
-    <input type="button" onclick="location.href='https://devweb2022.cis.strath.ac.uk/~vib20137/test/lasdsfdasfasddfsdf/admin.php'" value="Back to admin screen" /><table><h2>Current Orders:</h2>
+   <div id = "backButton"> <input  type="button" onclick="location.href='https://devweb2022.cis.strath.ac.uk/~vib20137/test/lasdsfdasfasddfsdf/admin.php'" value="Back to admin screen" class="btn btn-secondary "/></div>
+       <table class = "table table-striped table-dark table-hover"><h1>Current orders:</h1>
+        <thead class="thead-light">
         <tr>
             <th>order_id</th>
             <th>painting_id</th>
@@ -69,7 +93,7 @@ $result->data_seek(0);
             <th>email</th>
             <th>postal_address</th>
 
-        </tr>
+        </tr></thead>
         <?php
         if ($result->num_rows>0){
             while ($row = $result->fetch_assoc()){

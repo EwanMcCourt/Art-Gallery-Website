@@ -31,12 +31,77 @@ The suggested attribution is:
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 
     <style>
-        body {background-color:#424949;}
+        body,html  {
+            background-color:#343a40;
 
-        .carousel-item{
-            height: 75%;
+
+           }
+
+
+        #thePage{
+        position: absolute;
+            width:100%;
+            background-color:#343a40 ;
+
         }
 
+
+        .carousel-inner {
+
+           height:100%;
+
+
+
+        }
+
+        .carousel-item{
+            position: fixed;
+            height:100%;
+
+
+
+        }
+        #carouselExampleIndicators{
+            height:75%;
+        }
+        .carousel-item img {
+
+            min-width: 100%;
+            min-height: 100%
+        }
+
+        table{
+            z-index: =99999;
+            position: relative;
+            top:25%;
+        }
+
+        #pagination{
+            padding:10px;
+        }
+
+        .page-link {
+            border:#6c757d; background-color: #6c757d; color: #fff;
+
+        }
+        .page-link:hover {
+            border:#545b62; background-color: #545b62; color: #fff;
+        }
+
+
+
+
+        /*https://stackoverflow.com/questions/4919076/outline-effect-to-text*/
+        #theTitle{
+
+
+            position:absolute;
+            align:center;
+
+              font-weight: bold;
+            text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+
+        }
 
 
 
@@ -50,7 +115,7 @@ The suggested attribution is:
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 
-<
+
 <?php
 
 
@@ -107,7 +172,7 @@ $result1->data_seek(0);
 
 
 ?>
-<form action ="index.php" method ="post">
+<form  action ="index.php" method ="post">
 
    <?php while ($row = $duplicateResult1->fetch_assoc()){
     array_push($arrayOfPaintings,$row['image'] );
@@ -115,31 +180,35 @@ $result1->data_seek(0);
     <!--    //https://stackoverflow.com/questions/48824568/bootstrap-4-carousel-sliders-not-working-->
     <div id="carousel">
         <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel" >
-            <ol class="carousel-indicators">
-                <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
-                <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
-                <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
-            </ol>
-            <div class="carousel-inner">
-                <div class="carousel-item active">
-                    <?php echo '<img class="d-block w-100" src="data:image/jpeg;base64,' . base64_encode( $arrayOfPaintings[0] ). '"/>'?>
-                    <div class="carousel-caption d-none d-md-block">
-                        <h1>CARA'S ART GALLERY</h1>
-                        <p>AFFORDABLE, UNIQUE, LOW RESOLUTION PAINTINGS</p>
-                    </div>
-                </div>
-                <!--        //https://stackoverflow.com/questions/3229905/how-to-start-a-foreach-loop-at-a-specific-index-in-php-->
-
-                <?php for($offset=1; $offset < count($arrayOfPaintings); $offset++) {
+            <ol  class="carousel-indicators">
+                <li  data-target="#carouselExampleIndicators" data-slide-to="0" class="active" style="z-index: 9999; "></li>
+                <?php for($i=1; $i < count($arrayOfPaintings); $i++) {
                     ?>
-                    <div class="carousel-item">
 
-                        <?php echo '<img class="d-block w-100" src="data:image/jpeg;base64,' . base64_encode( $arrayOfPaintings[$offset] ). '"/>'?>
+                   <li data-target="#carouselExampleIndicators" data-slide-to=<?php echo $i ?> style="z-index: 9999; "></li>
 
-                        <div class="carousel-caption d-none d-md-block">
-                            <h1>CARA'S ART GALLERY</h1>
-                            <p>AFFORDABLE, UNIQUE, LOW RESOLUTION PAINTINGS</p>
-                        </div>
+
+                    <?php
+                }?>
+
+            </ol>
+            <div class="carousel-inner"><div class="carousel-caption  d-md-block" id = "theTitle" style="text-align: center">
+                    <h1>CARA'S ART GALLERY</h1 >
+                    <p>AFFORDABLE, UNIQUE, LOW RESOLUTION PAINTINGS</p>
+                </div>
+                <div class="carousel-item active ">
+                    <?php echo '<img class="d-block w-100" src="data:image/jpeg;base64,' . base64_encode( $arrayOfPaintings[0] ). '" style=" background-size: cover;  height:100%")/>'?>
+
+                </div>
+
+
+                <?php for($i=1; $i < count($arrayOfPaintings); $i++) {
+                    ?>
+                    <div class="carousel-item" >
+
+                        <?php echo '<img class="d-block w-100" src="data:image/jpeg;base64,' . base64_encode( $arrayOfPaintings[$i] ). '" )/>'?>
+
+
                     </div>
                     <?php
                 }?>
@@ -162,11 +231,11 @@ $result1->data_seek(0);
 
 
 
-<div id = "table">
+<div id = "thePage">
  <table class = "table table-striped table-dark table-hover">
      <thead class="thead-light">
         <tr>
-            <th>Id</th>
+
             <th>Name</th>
             <th>Image</th>
             <th>Date of completion</th>
@@ -186,7 +255,7 @@ $result1->data_seek(0);
 
 
                 echo "<tr>".
-                    "<td>".$row["id"]."</td>".
+
                     "<td>".$row["name"]."</td>".
                     "<td>".'<img src="data:image/jpeg;base64,'.base64_encode( $row['image'] ).'"width="100" height="100"/>'."</td>".
                     "<td>".$row["date_of_completion"]."</td>".
@@ -194,7 +263,7 @@ $result1->data_seek(0);
                     "<td>".$row["height(mm)"]."</td>".
                     "<td>".$row["price(£)"]."</td>".
                     "<td>".$row["description"]."</td>".
-                    "<td>"?><input type="button" onclick="location.href='https://devweb2022.cis.strath.ac.uk/~vib20137/test/lasdsfdasfasddfsdf/form.php?id=<?=$row['id'];?>';" value="Purchase" /></td></tr>
+                    "<td>"?><input type="button" onclick="location.href='https://devweb2022.cis.strath.ac.uk/~vib20137/test/lasdsfdasfasddfsdf/form.php?id=<?=$row['id'];?>';" value="Purchase" class = "btn btn-secondary"/></td></tr>
 
 
                  <?php
@@ -204,16 +273,16 @@ $result1->data_seek(0);
         }
 
         ?>
-    </table></div>
+    </table>
     <div id = "pagination">
     <nav aria-label="Page navigation">
         <ul class="pagination justify-content-center">
             <?php if ($page>1){?>
                 <li class = "page-item">
-                <a class="page-link" href="https://devweb2022.cis.strath.ac.uk/~vib20137/test/lasdsfdasfasddfsdf/index.php?page=<?= $previous;?>" tabindex="-1">&laquo;Previous</a>
+                <a class="page-link" href="https://devweb2022.cis.strath.ac.uk/~vib20137/test/lasdsfdasfasddfsdf/index.php?page=<?= $previous;?>" tabindex="-1" >&laquo;Previous</a>
                 </li><?php }else{?>
-                <li class = "page-item disabled">
-                    <a class="page-link" href="https://devweb2022.cis.strath.ac.uk/~vib20137/test/lasdsfdasfasddfsdf/index.php?page=<?= $page;?>" tabindex="-1">&laquo;Previous</a>
+                <li id = "disabled" class = "page-item disabled">
+                    <a class="page-link" href="https://devweb2022.cis.strath.ac.uk/~vib20137/test/lasdsfdasfasddfsdf/index.php?page=<?= $page;?>" tabindex="-1" style="background-color: #1b1e21ed">&laquo;Previous</a>
                 </li>
             <?php }?>
             <?php for($i=1;$i<=$number_of_pages;$i++) { ?>
@@ -224,10 +293,10 @@ $result1->data_seek(0);
             <?php } ?>
             <?php if ($page>=$number_of_pages){?>
                 <li class="page-item disabled">
-                    <a class="page-link" href="https://devweb2022.cis.strath.ac.uk/~vib20137/test/lasdsfdasfasddfsdf/index.php?page=<?= $page;?>"">Next &raquo;</a>
+                    <a class="page-link " href="https://devweb2022.cis.strath.ac.uk/~vib20137/test/lasdsfdasfasddfsdf/index.php?page=<?= $page;?>" style="background-color: #1b1e21ed" ">Next &raquo;</a>
                 </li> <?php }else{?>
                 <li class="page-item">
-                    <a class="page-link" href="https://devweb2022.cis.strath.ac.uk/~vib20137/test/lasdsfdasfasddfsdf/index.php?page=<?= $next;?>"">Next &raquo;</a>
+                    <a class="page-link" href="https://devweb2022.cis.strath.ac.uk/~vib20137/test/lasdsfdasfasddfsdf/index.php?page=<?= $next;?>" ">Next &raquo;</a>
                 </li>
             <?php }?>
         </ul>
@@ -236,7 +305,7 @@ $result1->data_seek(0);
 </form>
 
 
-
+</div>
 <?php
 
 
