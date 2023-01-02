@@ -1,92 +1,29 @@
-# CS312 Assignment 2
+# Solo Website Project
 
+Implement a shopping site to support Cara with handling painting orders. As with all specifications there are likely to be elements that are unclear - you should identify these and raise them in lectures/Mattermost. Clarifications may be made (additions in red, removals in grey).
 
+Base Solution - 18/40
+Implement the following:
 
-## Getting started
+A database driven shop front page (e.g. index.html or index.php), that:
+Lists the current art in the database (see No.3);
+Has an order button for each piece of art that takes the user to a form to place an order for that artwork (No.2). Note: there is no basket - just single art order form.
+An order form that includes fields for name, phone-number, email, postal-address and shows all details of the selected painting (name, completion date, size, price and Cara's textual description). On completion of this form the order should be acknowledged and added to the orders database (No.4). Note: Cara will set a single cost for each piece of art that includes VAT, postage and packing so there is no need to handle these separately. 
+An art database table that contains the name, date of completion, width (mm), height (mm), price (£) and a textual description of each piece of art along with an ID.
+An orders database table to store orders with suitable code to add orders in response to the order form (No.2);
+An admin section (e.g. admin.php) for Cara to view the list of orders, add details of new paintings and remove orders. This should be password protected with a fixed password YouAskMeHow22  (fixed passwords are not good practice normally!).
+Pages should pass HTML5 validation tests with all images having suitable alt-tags etc for accessibility. All code should be in a random character named directory on devweb2022
 
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
+Pagination Extra - 2/40
+Change the shop front to show 12 painting listings at a time with next and previous page buttons.
 
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
+Art Extra - 6/40 
+Add images to your art database table. Show thumbnails of the art on the main page along with their title. Show large (say half-screen) images on the order page. Images should not be stored in files but in the database itself using blobs (or longblobs). You should find sample images on the internet but use only Creative-Commons or copyright-free images. Please also scale the image - 750 x 750 pixels max is adequate for this assessment and won't overload the server.
 
-## Add your files
+Error Check Extra - 4/40 
+Add error checking and form validation to the order form using best practice combination of HTML5, JavaScript and PHP.
 
-- [ ] [Create](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#create-a-file) or [upload](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#upload-a-file) files
-- [ ] [Add files using the command line](https://docs.gitlab.com/ee/gitlab-basics/add-file.html#add-a-file-using-the-command-line) or push an existing Git repository with the following command:
+All submissions will be marked on:  Artistic Impression and Technical Extensions - 10/40
 
-```
-cd existing_repo
-git remote add origin https://gitlab.cis.strath.ac.uk/vib20137/cs312-assignment-2.git
-git branch -M main
-git push -uf origin main
-```
+Style the site to look fresh and artistic. All pages and images should be styled to appear nicely on a wide range of screen sizes. The whole site should have a professional feel. Marks will also be given for use of web libraries and frameworks (so long as the core functionality is still implemented) or additional technical components (e.g. a carousel of the art on the home page).
 
-## Integrate with your tools
-
-- [ ] [Set up project integrations](https://gitlab.cis.strath.ac.uk/vib20137/cs312-assignment-2/-/settings/integrations)
-
-## Collaborate with your team
-
-- [ ] [Invite team members and collaborators](https://docs.gitlab.com/ee/user/project/members/)
-- [ ] [Create a new merge request](https://docs.gitlab.com/ee/user/project/merge_requests/creating_merge_requests.html)
-- [ ] [Automatically close issues from merge requests](https://docs.gitlab.com/ee/user/project/issues/managing_issues.html#closing-issues-automatically)
-- [ ] [Enable merge request approvals](https://docs.gitlab.com/ee/user/project/merge_requests/approvals/)
-- [ ] [Automatically merge when pipeline succeeds](https://docs.gitlab.com/ee/user/project/merge_requests/merge_when_pipeline_succeeds.html)
-
-## Test and Deploy
-
-Use the built-in continuous integration in GitLab.
-
-- [ ] [Get started with GitLab CI/CD](https://docs.gitlab.com/ee/ci/quick_start/index.html)
-- [ ] [Analyze your code for known vulnerabilities with Static Application Security Testing(SAST)](https://docs.gitlab.com/ee/user/application_security/sast/)
-- [ ] [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/ee/topics/autodevops/requirements.html)
-- [ ] [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/ee/user/clusters/agent/)
-- [ ] [Set up protected environments](https://docs.gitlab.com/ee/ci/environments/protected_environments.html)
-
-***
-
-# Editing this README
-
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!). Thank you to [makeareadme.com](https://www.makeareadme.com/) for this template.
-
-## Suggestions for a good README
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
-
-## Name
-Choose a self-explaining name for your project.
-
-## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
-
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
-
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
-
-## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
-
-## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
-
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
-
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
-
-## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
-
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
-
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
-
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
-
-## License
-For open source projects, say how it is licensed.
-
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
